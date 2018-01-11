@@ -4,6 +4,7 @@ import {Bounce} from 'react-activity';
 import Dots from 'react-activity/lib/Dots';
 
 import gLogo from './images/google.png';
+import coinSumLogo from './images/coinsum_logo-03.png'
 import v from './images/icon_v.png';
 import x from './images/icon_x.png';
 
@@ -130,7 +131,10 @@ class App extends Component {
             <div>
                 <header className="App-header">
                     <div>
-                        <h1>Coin Sum</h1>
+                        <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                            <img alt={''} style={{width:60,height:60,marginRight:5}} src={coinSumLogo}/>
+                            <h1>Coin Sum</h1>
+                        </div>
                         <p style={{}}>Cryptocurrency portfolio</p>
                     </div>
                     <form style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}} onSubmit={(ev) => this.login(ev)}>
@@ -159,7 +163,10 @@ class App extends Component {
 
                             {/* Coin Sum Header */}
                             <header className="App-header">
-                                <h1>Coin Sum</h1>
+                                <div style={{display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,margin:15,fontWeight:'bold'}}>
+                                    <img alt={''} style={{width:60,height:60}} src={coinSumLogo}/>
+                                    <div style={{marginTop:10}}>Coin Sum</div>
+                                </div>
                                 <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
                                     <img alt={''} style={{width:30,height:30,borderRadius:60, margin:10}} src={this.state.userInfo.photoURL}/>
                                     <p>{this.state.userInfo.displayName}</p>
@@ -250,28 +257,28 @@ class App extends Component {
                             {/* Coin Sum Result */}
                             {
                                 this.getTotalBtc()!='NaN' ?
-                                <div>
-                                    <p>{`현재 BTC 갯수 : ${this.getTotalBtc()} btc`}</p>
-                                    <p>{`총 평가 금액 : ${(this.state.currentBtcPrice * this.getTotalBtc()).toFixed(0)} 원 (BTC ${Math.floor(this.state.currentBtcPrice)}원 기준)`}</p>
+                                    <div>
+                                        <p>{`현재 BTC 갯수 : ${this.getTotalBtc()} btc`}</p>
+                                        <p>{`총 평가 금액 : ${(this.state.currentBtcPrice * this.getTotalBtc()).toFixed(0)} 원 (BTC ${Math.floor(this.state.currentBtcPrice)}원 기준)`}</p>
 
-                                    <label>BTC 직접입력 : </label>
-                                    <input
-                                        type="number"
-                                        placeholder="23,000,000원"
-                                        onChange={(ev)=>this.changeCustomBtc(ev)}
-                                        style={{
-                                            textAlign: 'center',
-                                            fontSize: 18,
-                                            border: 'none',
-                                            borderBottomWidth: 1,
-                                            borderBottomColor: '#888',
-                                            borderBottomStyle: 'solid'
-                                        }}
-                                    />
-                                    <p>{`예상 평가액 : ${Math.floor(this.getTotalBtc()*this.state.customBtcPrice)}원`}</p>
-                                </div>
-                                :
-                                <Dots color="#727981" size={10} speed={1} />
+                                        <label>BTC 직접입력 : </label>
+                                        <input
+                                            type="number"
+                                            placeholder="23,000,000원"
+                                            onChange={(ev)=>this.changeCustomBtc(ev)}
+                                            style={{
+                                                textAlign: 'center',
+                                                fontSize: 18,
+                                                border: 'none',
+                                                borderBottomWidth: 1,
+                                                borderBottomColor: '#888',
+                                                borderBottomStyle: 'solid'
+                                            }}
+                                        />
+                                        <p>{`예상 평가액 : ${Math.floor(this.getTotalBtc()*this.state.customBtcPrice)}원`}</p>
+                                    </div>
+                                    :
+                                    <Dots color="#727981" size={10} speed={1} />
                             }
                         </div>
                         :
