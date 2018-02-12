@@ -27,15 +27,18 @@ const getSuggestionValue = (suggestion,callback) =>{
     return suggestion.symbol;
 };
 
-const getCoinSrc = (coin) => `https://files.coinmarketcap.com/static/img/coins/64x64/${coin}.png`
+const getCoinSrc = (coin) => `https://files.coinmarketcap.com/static/img/coins/64x64/${coin}.png`;
 
-const renderSuggestion = (suggestion) => (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-        {/*<img style={{width:20,height:20,marginRight:5}} src={suggestion.logo}/>*/}
-        <img alt={''} style={{width:20,height:20,marginRight:5}} src={getCoinSrc(suggestion.name.toLowerCase())}/>
-        {`${suggestion.name}(${suggestion.symbol})`}
-    </div>
-);
+const renderSuggestion = (suggestion) => {
+    return (
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            {/*<img style={{width:20,height:20,marginRight:5}} src={suggestion.logo}/>*/}
+            <img alt={''} style={{width: 20, height: 20, marginRight: 5}}
+                 src={getCoinSrc(suggestion.name.toLowerCase())}/>
+            {`${suggestion.name}(${suggestion.symbol})`}
+        </div>
+    );
+};
 
 class App extends Component {
     constructor(props){
@@ -51,7 +54,7 @@ class App extends Component {
             portfolioList:[],
             currentPrice:[],
             currentBtcPrice:0,
-            customBtcPrice:23000000,
+            customBtcPrice:10000000,
             totalValue:0,
             value:'',
             suggestions: [],
@@ -60,7 +63,7 @@ class App extends Component {
     }
 
     componentWillMount(){
-        this.getCurrentBtcPrice()
+        this.getCurrentBtcPrice();
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 console.log(user);
@@ -81,11 +84,12 @@ class App extends Component {
         setInterval(()=>{
             this.setState({counter:this.state.counter-1},
                 ()=>{
-                    if(this.state.counter==0)
+                    if(this.state.counter===0){
                         this.setState({counter:30},()=>{
                             this.getCurrentBtcPrice();
                             this.fetchPortfolio();
                         })
+                    }
                 })
         },1000)
 
@@ -117,12 +121,12 @@ class App extends Component {
             .then((res)=>{
                 let portfolio = res.val();
                 if(portfolio) {
-                    this.setState({portfolioList: portfolio})
-                    portfolio.forEach((elem,index,coins)=>{
+                    this.setState({portfolioList: portfolio});
+                    portfolio.forEach((elem,index)=>{
                         this.getCurrentPrice(elem,index);
                     })
                 }
-            })
+            });
         console.log(window.innerHeight)
     }
 
@@ -204,7 +208,7 @@ class App extends Component {
                                                             onChange={(ev)=>this.changePrice(ev,number)}
                                                             value={this.state.portfolioList[number].buyPrice}
                                                             placeholder="0.00000000"
-                                                            style={{margin:5,border:'none',borderBottomStyle:'solid',borderBottomWidth:1,borderBottomColor:'#888',marginLeft:40,textAlign:'right'}}></input>
+                                                            style={{margin:5,border:'none',borderBottomStyle:'solid',borderBottomWidth:1,borderBottomColor:'#888',marginLeft:40,textAlign:'right'}}>''</input>
                                                         btc
                                                     </div>
                                                     <div style={{display:'flex',flex:1,justifyContent:'flex-start',alignItems:'center'}}>
@@ -213,7 +217,7 @@ class App extends Component {
                                                             onChange={(ev)=>this.changeAmount(ev,number)}
                                                             value={this.state.portfolioList[number].amount}
                                                             placeholder="0.00000000"
-                                                            style={{margin:5,border:'none',borderBottomStyle:'solid',borderBottomWidth:1,borderBottomColor:'#888',marginLeft:40,textAlign:'right'}}></input>
+                                                            style={{margin:5,border:'none',borderBottomStyle:'solid',borderBottomWidth:1,borderBottomColor:'#888',marginLeft:40,textAlign:'right'}}>''</input>
                                                         amount
                                                     </div>
                                                 </div>
@@ -256,7 +260,7 @@ class App extends Component {
 
                             {/* Coin Sum Result */}
                             {
-                                this.getTotalBtc()!='NaN' ?
+                                this.getTotalBtc()!=='NaN' ?
                                     <div>
                                         <p>{`현재 BTC 갯수 : ${this.getTotalBtc()} btc`}</p>
                                         <p>{`총 평가 금액 : ${(this.state.currentBtcPrice * this.getTotalBtc()).toFixed(0)} 원 (BTC ${Math.floor(this.state.currentBtcPrice)}원 기준)`}</p>
@@ -292,11 +296,11 @@ class App extends Component {
         this.setState({customBtcPrice:ev.target.value})
     }
     getRate(index){
-        let rate = this.state.currentPrice[index]/this.state.portfolioList[index].buyPrice*100
+        let rate = this.state.currentPrice[index]/this.state.portfolioList[index].buyPrice*100;
         return (rate-100).toFixed(2)
     }
     getBtc(index){
-        let btc = (this.state.currentPrice[index]-this.state.portfolioList[index].buyPrice)*this.state.portfolioList[index].amount
+        let btc = (this.state.currentPrice[index]-this.state.portfolioList[index].buyPrice)*this.state.portfolioList[index].amount;
         return btc.toFixed(8)
     }
     getTotalBtc(){
@@ -304,7 +308,7 @@ class App extends Component {
         let sum=0;
         portfolioList.forEach((e,i)=>{
             sum+=Number(e.amount*currentPrice[i])
-        })
+        });
         return sum.toFixed(8);
     }
     getCurrentBtcPrice(){
@@ -376,23 +380,23 @@ class App extends Component {
 
     login(ev){
         console.log('login submit');
-        var provider = new firebase.auth.GoogleAuthProvider();
+        let provider = new firebase.auth.GoogleAuthProvider();
         provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
         firebase.auth().signInWithPopup(provider).then(function(result) {
             // This gives you a Google Access Token. You can use it to access the Google API.
-            var token = result.credential.accessToken;
+            let token = result.credential.accessToken;
             // The signed-in user info.
-            var user = result.user;
+            let user = result.user;
             console.log(user,token)
 
         }).catch(function(error) {
             // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            let errorCode = error.code;
+            let errorMessage = error.message;
             // The email of the user's account used.
-            var email = error.email;
+            let email = error.email;
             // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
+            let credential = error.credential;
 
             console.log(errorCode,errorMessage,email,credential)
         });
